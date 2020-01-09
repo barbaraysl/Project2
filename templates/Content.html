@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+  body{
+    background-image: url('/static/images/ales-me-z0bACVUDTJM-unsplash.jpg');
+    
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed;
+  }
+  
+</style>
+<style>
+  #Dashboard title{
+    background-color: bisque;
+    font:italic;
+    font-family: 'Lucida Sans';
+    font-weight: bold;
+    color: darkslategrey
+   }
+   </style>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Wine Score Dashboard</title>
+   <!-- Leaflet CSS & JS -->
+   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
+   integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+   crossorigin=""/>
+   <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"
+   integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
+   crossorigin=""></script>
+
+   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+ <!--D3 cdn-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.1/d3.min.js"></script>
+<script src="/static/js/app.js"></script>
+<!-- Our CSS -->
+<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.7/d3.js"></script>
+    <!-- <script src="leaflet-heat.js"></script> -->
+    
+
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 jumbotron text-center">
+        <h1>Wine Score Dashboard</h1>
+        <p>Use the interactive charts below to explore wine data set</p>
+      </div>
+    </div>
+    
+    <div class="row">
+      <!-- <div class="col-md-2">
+        <div class="well">
+          <h5>Test Subject ID No.:</h5>
+          <select id="selDataset" onchange="optionChanged(this.value)">
+            <option value="us">United States</option>
+          </select>
+          
+        </div> -->
+        <!-- <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Demographic Info</h3>
+          </div>
+          <div id="sample-metadata" class="panel-body"></div>
+          <h3 class="panel-body">id:</h3>
+          <h3 class="panel-body">ethnicity:</h3>
+          <h3 class="panel-body">age:</h3>
+          <h3 class="panel-body">location:</h3>
+          <h3 class="panel-body">bbtype:</h3>
+
+        </div> -->
+   
+   
+        <!-- <div class="col-md-12"> -->
+          
+        <!-- </div> 
+         -->
+         <div class="col-md-12">
+          <div id="map" style="width: 1150px; height: 500px; position: relative; outline: none;">
+            <script >
+              // API key
+const API_KEY = "pk.eyJ1IjoiYmFyYmFyYXlzbCIsImEiOiJjazQyMGszaXAwM2lyM2twdGQ0dWppNzJsIn0.JhEljgI3217QYJaPTo7JCQ";
+
+var myMap = L.map("map", {
+  center: [46.227638
+, 2.213749],
+  zoom: 2
+
+});
+// Adding tile layer
+L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+  attribution: "Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors, <a href='https://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>, Imagery © <a href='https://www.mapbox.com/'>Mapbox</a>",
+  maxZoom: 18,
+  id: "mapbox.wheatpaste",
+  accessToken: API_KEY
+}).addTo(myMap);
+d3.csv('../static/data/Final_Table with Lat Long.csv').then((data) => {
+    
+  function markerSize(mag) {
+  return mag*8000;
+  }
+  // var count=0;   
+    for (var i = 0; i < data.length; i++) {
+      var data_defined=data[i];
+      
+
+
+
+    function chooseColor(borough) {
+  switch (borough) {
+  case "France":
+    return "#190019";
+   case "Usa":
+    return "#400040";
+  case "Italy":
+    return "#800080";
+    case "Chile":
+    return "#800080";
+  case "Australia":
+    return "#800080";
+    case "New Zealand":
+    return "#800080";
+ 
+  default:
+    return "#f2e5f2";
+  }
+}
+
+     geojson= L.circle([data_defined.Lat,data_defined.Long], {
+        fillOpacity: 0.8,
+        weight:0.5,
+        color: "black",
+        fillColor: chooseColor(data_defined.country),
+        // Setting our circle's radius equal to the output of our markerSize function
+        // This will make our marker's size proportionate to its population
+        radius: markerSize(data_defined._score)
+      }).bindPopup("<p>" +  " Number of Wine: "+ data_defined.Count+ " | Average Score: "+ data_defined._score  + 
+      "</p><hr><p>" + data_defined.country + "</p>").addTo(myMap);}}
+);
+
+     
+
+</script>
+
+
+        </div>
+      </div>
+    
+        <div class="col-md-12">
+          <div class="control-row" id="two">
+            Select Individual Country to see Score Distribution: 
+            <select class="countrydata">
+            </select>
+          </div>
+        </div>
+
+        
+      <div class="col-md-6">
+        <div id="bar" data-num="0">
+          <div class="plot" id="plotdiv"></div>
+        </div>
+      </div>
+     
+ 
+    
+      <div class="col-md-6">
+        <div id="bubble" data-num="0">
+          <div class="plot" id="plotdiv"></div>
+        </div>
+      
+    </div>
+  </div>
+
+
+</body>
+
+</html>
